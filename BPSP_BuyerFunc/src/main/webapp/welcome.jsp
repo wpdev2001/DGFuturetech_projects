@@ -1,68 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 <head>
+    <meta charset="ISO-8859-1">
     <title>Welcome Page</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Arial', sans-serif;
-        }
-        .navbar {
-            margin-bottom: 20px;
-        }
-        .welcome-message {
-            margin-top: 50px;
-            text-align: center;
-        }
-        .nav-link {
-            font-size: 18px;
-            color: #ffffff !important; /* Set text color to white */
-            background-color: #007bff; /* Set background color */
-            border-radius: 5px; /* Rounded corners */
-            padding: 10px 20px; /* Padding around the link */
-            transition: background-color 0.3s ease; /* Smooth color transition */
-        }
-        .nav-link:hover {
-            background-color: #0056b3; /* Darker color on hover */
-        }
-        .nav-link.active {
-            background-color: #0056b3; /* Active link color */
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <link rel="stylesheet" href="welcome-styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">MyApp</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="Controller?action=home">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Controller?action=buyersList">Buyers List</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Controller?action=otherSection">Other Section</a>
-                </li>
+    <nav>
+        <div class="navbar">
+            <div class="logo"><a href="#">DGFutureTech</a></div>
+            <ul class="menu">
+                <li><a href="Controller?action=home">Home</a></li>
+                <li><a href="Controller?action=buyersList">Buyers List</a></li>
+                <li><a href="Controller?action=logout">Logout</a></li>
             </ul>
         </div>
     </nav>
-    
-    <!-- Welcome Message -->
-    <div class="container welcome-message">
-        <h2>Welcome, ${username}!</h2>
-        <p>Use the navigation bar to access different sections.</p>
+    <section id="Home">Welcome, ${username}!</section>
+    <section id="About">About Section</section>
+    <section id="Category">Category Section</section>
+    <section id="Contact">Contact Section</section>
+    <section id="Feedback">Feedback Section</section>
+    <div class="button">
+        <a href="#Home"><i class="fas fa-arrow-up"></i></a>
     </div>
 
-    <!-- Bootstrap and jQuery JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

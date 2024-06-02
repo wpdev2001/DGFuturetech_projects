@@ -120,3 +120,15 @@ label {
     padding-left: 0px;
     color: #A2A4A4;
 }
+
+/* Add this at the bottom of your styles.css file */
+
+.forgot-password {
+    color: yellow;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    color: lightyellow;
+    text-decoration: underline;
+}

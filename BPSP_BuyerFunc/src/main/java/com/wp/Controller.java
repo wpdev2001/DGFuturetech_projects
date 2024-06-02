@@ -3,7 +3,7 @@ package com.wp;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import jakarta.servlet.RequestDispatcher;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,8 +27,11 @@ public class Controller extends HttpServlet {
             case "buyersList":
                 handleBuyersList(request, response);
                 break;
-            case "otherSection":
-                handleOtherSection(request, response);
+            case "logout":
+                handleLogout(request, response);
+                break;
+            case "forgotPassword":
+                handleForgotPassword(request, response);
                 break;
             default:
                 response.sendRedirect("login.jsp");
@@ -45,6 +48,8 @@ public class Controller extends HttpServlet {
 
         if (action.equals("login")) {
             handleLogin(request, response);
+        } else if (action.equals("resetPassword")) {
+            handleResetPassword(request, response);
         } else {
             doGet(request, response);
         }
@@ -83,9 +88,8 @@ public class Controller extends HttpServlet {
         if (session == null || session.getAttribute("username") == null) {
             response.sendRedirect("login.jsp");
         } else {
-            List<Buyers_Info> buyerList;
             try {
-                buyerList = BuyersDbUtil.getBuyerList();
+                List<Buyers_Info> buyerList = BuyersDbUtil.getBuyerList();
                 request.setAttribute("buyerList", buyerList);
                 request.getRequestDispatcher("show-buyer-list.jsp").forward(request, response);
             } catch (ClassNotFoundException | SQLException e) {
@@ -94,14 +98,31 @@ public class Controller extends HttpServlet {
         }
     }
 
-    private void handleOtherSection(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void handleLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("username") == null) {
-            response.sendRedirect("login.jsp");
-        } else {
-            // Handle other section logic
-            // For example, redirect to another JSP page
-            request.getRequestDispatcher("other-section.jsp").forward(request, response);
+        if (session != null) {
+            session.invalidate();
+        }
+        response.sendRedirect("login.jsp");
+    }
+
+    private void handleForgotPassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
+    }
+
+    private void handleResetPassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String newPassword = request.getParameter("newPassword");
+
+        try {
+            if (LoginUtil.resetPassword(username, newPassword)) {
+                response.sendRedirect("login.jsp");
+            } else {
+                response.sendRedirect("forgotPassword.jsp");
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            response.sendRedirect("forgotPassword.jsp");
         }
     }
 }

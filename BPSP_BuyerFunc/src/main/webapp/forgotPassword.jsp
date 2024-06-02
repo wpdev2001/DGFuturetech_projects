@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login Page</title>
+    <title>Forgot Password</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
@@ -14,32 +14,29 @@
                     <i class="fa fa-key" aria-hidden="true"></i>
                 </div>
                 <div class="col-lg-12 login-title">
-                    DGFutureTech
+                    Reset Password
                 </div>
                 <div class="col-lg-12 login-form">
                     <div class="col-lg-12 login-form">
                         <form action="Controller" method="post">
-                            <input type="hidden" name="action" value="login">
+                            <input type="hidden" name="action" value="resetPassword">
                             <div class="form-group">
                                 <label class="form-control-label">USERNAME</label>
                                 <input type="text" name="username" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-control-label">PASSWORD</label>
-                                <input type="password" name="password" class="form-control" required>
+                                <label class="form-control-label">NEW PASSWORD</label>
+                                <input type="password" name="newPassword" class="form-control" required>
                             </div>
                             <div class="col-lg-12 loginbttm">
                                 <div class="col-lg-6 login-btm login-text">
                                     <!-- Error Message -->
                                 </div>
                                 <div class="col-lg-6 login-btm login-button">
-                                    <button type="submit" class="btn btn-outline-primary">LOGIN</button>
+                                    <button type="submit" class="btn btn-outline-primary">RESET PASSWORD</button>
                                 </div>
                             </div>
                         </form>
-                    </div>
-                    <div class="col-lg-12 login-form">
-                        <a href="forgotPassword.jsp" class="forgot-password">Forgot Password?</a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-2"></div>

@@ -8,19 +8,25 @@ import java.sql.SQLException;
 public class LoginUtil {
 
     public static boolean authenticate(String username, String password) throws ClassNotFoundException, SQLException {
-        Connection conn = DatabaseUtil.getConnection();
+        Connection connection = DatabaseUtil.getConnection();
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, username);
-        ps.setString(2, password);
-        ResultSet rs = ps.executeQuery();
-
-        boolean isAuthenticated = rs.next();
-
-        rs.close();
-        ps.close();
-        conn.close();
-
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, username);
+        statement.setString(2, password);
+        ResultSet resultSet = statement.executeQuery();
+        boolean isAuthenticated = resultSet.next();
+        connection.close();
         return isAuthenticated;
+    }
+
+    public static boolean resetPassword(String username, String newPassword) throws ClassNotFoundException, SQLException {
+        Connection connection = DatabaseUtil.getConnection();
+        String sql = "UPDATE users SET password = ? WHERE username = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, newPassword);
+        statement.setString(2, username);
+        int rowsUpdated = statement.executeUpdate();
+        connection.close();
+        return rowsUpdated > 0;
     }
 }
