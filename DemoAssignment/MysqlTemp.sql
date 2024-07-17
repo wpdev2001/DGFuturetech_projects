@@ -347,4 +347,292 @@ SELECT DATE_FORMAT(NOW(),'%M %D at %T');
   
    INSERT INTO contacts VALUES('AAA',134567890); -- INSERTING INVALID DATA
   
+  -- How to drop a column
+  ALTER TABLE contacts
+  DROP COLUMN name;
+  SELECT * FROM contacts;
   
+  -- How to add a column
+  ALTER TABLE contacts
+  ADD COLUMN name VARCHAR(50);
+
+  -- How to rename a Column?
+  ALTER TABLE contacts
+  RENAME COLUMN name TO Full_name;
+  
+  -- How to rename a table?
+  ALTER TABLE contacts
+  RENAME to Mycontacts;
+  
+  SELECT * FROM Mycontacts;
+  
+  -- How to modify a column (i.e., Changing datatype or adding Default values,etc)
+  
+  ALTER TABLE Mycontacts
+  MODIFY mob VARCHAR(20) DEFAULT 'Unknown';
+  
+  -- ================================================
+  -- CREATING NEW TABLE TO PERFORM ADVANCE OPERATIONS
+  CREATE TABLE customers(
+  cust_id INT PRIMARY KEY,
+  name VARCHAR(50),
+  email VARCHAR(25)
+  );
+  -- INSERTING DATA
+INSERT INTO customers (cust_id, name, email) VALUES
+(1, 'raju', 'raju@example.com'),
+(2, 'sham', 'sham@example.com'),
+(3, 'baburao', 'baburao@example.com'),
+(4, 'paul', 'paul@example.com'),
+(5, 'alex', 'alex@example.com');
+
+SELECT * FROM customers;
+
+  CREATE TABLE orders(
+  ord_id INT PRIMARY KEY,
+  o_date DATE,
+  amount DECIMAL(12,2),
+  cust_id INT,
+  FOREIGN KEY(cust_id) REFERENCES customers(cust_id));
+  
+INSERT INTO orders (ord_id, o_date, amount, cust_id) VALUES
+(1, '2024-07-01', 250.00, 1),
+(2, '2024-07-02', 300.00, 3),
+(3, '2024-07-03', 450.00, 3),
+(4, '2024-07-04', 500.00, 4),
+(5, '2024-07-05', 600.00, 5);
+
+-- cannot insert the cust_id which is not present in the customers table
+INSERT INTO orders (ord_id, o_date, amount, cust_id) VALUES (6, '2024-08-01', 250.00, 10);
+
+SELECT * FROM orders;
+
+-- Gen Task
+-- CROSS JOIN(Every row from one table is combined with every row from second)
+SELECT * FROM customers,orders;
+
+-- Finding the all possible combinations
+SELECT COUNT(*) FROM customers,orders;
+
+-- INNER JOIN
+SELECT * FROM customers -- primary key table
+INNER JOIN
+orders -- foreign key table
+ON orders.cust_id=customers.cust_id;
+
+-- Q] What if i change the order of table
+SELECT * FROM orders -- foreign key table
+INNER JOIN
+customers -- primary key table
+ON orders.cust_id=customers.cust_id;
+
+-- INNER JOIN WITH GROUP BY
+-- Give me the total of purchase done by each employee?
+SELECT name,SUM(amount) FROM customers INNER JOIN orders ON orders.cust_id=customers.cust_id GROUP BY name;
+
+-- LEFT JOIN
+SELECT * FROM customers
+LEFT JOIN
+orders
+ON orders.cust_id=customers.cust_id;
+
+-- Give me the total of purchase done by each employee?
+SELECT name,IFNULL(SUM(amount),0) FROM customers
+LEFT JOIN
+orders
+ON orders.cust_id=customers.cust_id GROUP BY(name); 
+
+-- RIGHT JOIN  
+SELECT * FROM orders
+RIGHT JOIN
+customers ON customers.cust_id=orders.cust_id;
+  
+-- CASECADE ON DELETE
+-- You cannot delete the customers table info which is being referenced in another table  
+-- dropping table orders in order to update the query
+DROP TABLE orders;
+
+CREATE TABLE orders(
+ord_id INT PRIMARY KEY,
+o_date DATE,
+amount DECIMAL(12,2),
+cust_id INT,
+FOREIGN KEY(cust_id) REFERENCES customers(cust_id) ON DELETE CASCADE);
+
+DELETE FROM customers WHERE name='raju';
+
+-- ex: 8
+-- creating table authors and books
+CREATE TABLE authors (
+  author_id INT PRIMARY KEY AUTO_INCREMENT,
+  author_name VARCHAR(50)
+);
+
+INSERT INTO authors (author_name) VALUES 
+('Raju'), 
+('Sham'), 
+('Baburao'), 
+('Paul');
+
+CREATE TABLE books (
+  book_id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(100) NOT NULL,
+  ratings INT,
+  au_id INT,
+  FOREIGN KEY (au_id) REFERENCES authors(author_id) ON DELETE CASCADE
+);
+
+INSERT INTO books (title, ratings, au_id) VALUES 
+('The Great Adventure', 5, 1),
+('Learning SQL', 4, 2),
+('Mastering Databases', 3, 3),
+('Advanced Programming', 4, 4),
+('Beginning with SQL', 5, 1);
+
+
+SELECT author_name,title,ratings
+FROM authors
+INNER JOIN 
+books ON authors.author_id=books.au_id;
+
+SELECT author_name,title,ratings
+FROM authors
+LEFT JOIN 
+books ON authors.author_id=books.au_id;
+
+-- Give a remark as Good whose rating is greater than 3, Average whose rating is less than 3.
+SELECT author_name,ratings,
+CASE
+	WHEN ratings>3 THEN 'Good'
+    ELSE 'Average'
+END as Remark
+FROM authors
+INNER JOIN
+books ON authors.author_id=books.au_id;
+
+-- MANY TO MANY RELATIONSHIP
+-- creating tables student, courses and student_course
+CREATE TABLE students(
+id INT PRIMARY KEY AUTO_INCREMENT,
+student_name VARCHAR(30));
+
+-- Inserting values
+INSERT INTO students (student_name) VALUES 
+('John Doe'),
+('Jane Smith'),
+('Michael Johnson'),
+('Emily Davis'),
+('William Brown');
+
+
+CREATE TABLE courses(
+id INT AUTO_INCREMENT PRIMARY KEY,
+course_name VARCHAR(25),
+fees INT);
+
+-- Inserting values
+INSERT INTO courses (course_name, fees) VALUES 
+('Mathematics', 5000),
+('Science', 6000),
+('History', 4000),
+('English', 4500),
+('Computer Science', 7000);
+
+
+CREATE TABLE student_course(
+student_id INT,
+course_id INT,
+FOREIGN KEY(student_id) REFERENCES students(id),
+FOREIGN KEY(course_id) REFERENCES courses(id)
+);
+
+-- Inserting values
+INSERT INTO student_course (student_id, course_id) VALUES 
+(1, 1),
+(1, 2),
+(2, 3),
+(3, 4),
+(3, 5),
+(4, 1),
+(5, 2),
+(5, 3);
+
+-- JOINS with Many to Many relationships
+-- Give me the data of student mapped with their attended courses
+SELECT student_name,course_name FROM students
+JOIN 
+	student_course ON student_course.student_id = students.id
+JOIN
+	courses ON student_course.student_id = courses.id;
+    
+-- ex: 9
+-- print the number of students for each course
+SELECT course_name,COUNT(student_name) FROM students
+JOIN
+	student_course ON student_course.student_id = students.id
+JOIN
+	courses ON student_course.student_id = courses.id
+GROUP BY course_name;
+
+-- print the number of courses taken by each students
+SELECT student_name,COUNT(course_name) FROM students
+JOIN
+	student_course ON student_course.student_id = students.id
+JOIN
+	courses ON student_course.student_id = courses.id
+GROUP BY student_name;
+
+--  Give the total fees paid  by each student
+SELECT student_name,SUM(fees) FROM students
+JOIN
+	student_course ON student_course.student_id = students.id
+JOIN
+	courses ON student_course.student_id = courses.id
+GROUP BY student_name;
+
+-- VIEWS : It acts as a virtual table
+CREATE VIEW inst_info AS
+SELECT student_name,course_name, fees FROM students
+JOIN
+	student_course ON student_course.student_id = students.id
+JOIN
+	courses ON student_course.student_id = courses.id;
+    
+select * from inst_info;
+
+-- HAVING CLAUSE
+-- sum of fees paid by each student
+SELECT student_name,SUM(fees) FROM inst_info GROUP BY student_name;
+
+-- list of student who paid fees greater than 8000
+SELECT student_name,SUM(fees) AS total_fee FROM inst_info GROUP BY student_name HAVING total_fee>8000;
+
+-- GROUP BY ROLLUP
+SELECT IFNULL(student_name,"TOTAL"),SUM(fees) AS total_fee FROM inst_info GROUP BY student_name WITH ROLLUP;
+
+-- total course purchased by each student
+SELECT IFNULL(student_name,"TOTAL"),COUNT(fees) AS total_fee FROM inst_info GROUP BY student_name WITH ROLLUP;
+
+-- ====== STORED PROCEDURES
+
+DELIMITER $$
+CREATE PROCEDURE emp_info()
+BEGIN
+	SELECT * FROM employees ORDER BY salary;
+END$$
+DELIMITER ;
+
+-- calling the stored procedure
+call emp_info();
+
+-- ARGUMENT PASSING TO PROCEDURE
+DELIMITER $$
+CREATE PROCEDURE get_empId(IN p_fname VARCHAR(30))
+BEGIN
+	SELECT emp_id FROM employees
+    WHERE fname = p_fname;
+END$$
+DELIMITER ;
+
+call get_empId("John");
+
