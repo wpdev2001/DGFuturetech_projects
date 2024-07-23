@@ -1,0 +1,94 @@
+1. Connecting to database by adding configurations to application.properties.
+2. Working on entities i.e. user and order
+3. Working on repositories(Creating repositories package) package and inbuilt libraries which is provided by spring data JPA
+In this we need to simply extend JpaRepository, the JPA repository will provides its implementation by default
+
+4. Creating business class/ Services
+--> Created userService 
+--> Created HelperException class inside helper package
+
+5. Main point is to create an API
+--> 
+	User APIs
+	---------
+	//createUser
+	//get all users
+	//get single user
+	//delete user
+	//update user[TODO]
+
+	Order APIs
+	----------
+	//create order
+	//get all orders
+	//get single order
+	//delete order
+	//update order[TODO]
+
+6. Creating schema.graphqls file 
+-- Defining types, Query and Mutation
+
+7. Mapping Query and Mutation to the Controller methods
+-- Creating controller package to define the controller for both user and order
+
+
+--------------------------------------------------------------------------
+Sample queries:
+1.
+mutation{
+  createUser(
+    name:"Test 3",
+    phone : "8888888880",
+    email : "test3@gmail.com",
+    password : "test@789"
+  ){
+    name
+    userId
+  }
+}
+
+2.
+query{
+  getUsers{
+    userId,
+    name    
+  }
+}
+
+3.
+mutation{
+  createOrder(
+    orderDetail:"This is first order",
+    address:"Lukhnow",
+    price:2999,
+    userId:1
+  )
+  {
+    orderId,
+    orderDetail
+  }
+}
+
+4.
+query{
+  getUsers{
+    userId,
+    name,
+    orders{
+      orderDetail
+      address
+      price
+    }
+  }
+}
+
+5.
+query{
+	getOrders{
+		orderDetail,
+		price,
+		user{
+			name
+    }
+  }
+}
