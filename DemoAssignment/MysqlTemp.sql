@@ -636,3 +636,48 @@ DELIMITER ;
 
 call get_empId("John");
 
+====================================================================================================
+
+1. INNER JOIN
+Returns: Only the rows that have matching values in both tables.
+
+Syntax:
+SELECT *
+FROM table1
+INNER JOIN table2
+ON table1.column = table2.column;
+2. LEFT JOIN (or LEFT OUTER JOIN)
+Returns: All rows from the left table, and the matched rows from the right table. If no match, NULLs are returned from the right side.
+
+Syntax:
+SELECT *
+FROM table1
+LEFT JOIN table2
+ON table1.column = table2.column;
+3. RIGHT JOIN (or RIGHT OUTER JOIN)
+Returns: All rows from the right table, and the matched rows from the left table. If no match, NULLs are returned from the left side.
+
+Syntax:
+SELECT *
+FROM table1
+RIGHT JOIN table2
+ON table1.column = table2.column;
+4. FULL JOIN (or FULL OUTER JOIN)
+Returns: All rows from both tables, with NULLs in places where a match is not found.
+
+Syntax:
+SELECT *
+FROM table1
+FULL JOIN table2
+ON table1.column = table2.column;
+5. CROSS JOIN
+Returns: Cartesian product of both tables (every row of the first table combined with every row of the second).
+
+Syntax:
+SELECT *
+FROM table1
+CROSS JOIN table2;
+Bonus:
+SELF JOIN: Not a separate type but a way to join a table to itself.
+
+NATURAL JOIN: Automatically joins tables on columns with the same name and compatible data types (less commonly used due to implicit behavior).
